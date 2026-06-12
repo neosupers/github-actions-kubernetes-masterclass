@@ -19,11 +19,6 @@ jobs:
       # Otherwise the job builds the images locally to validate the
       # Dockerfiles and exits green — a "dry run."
   Push_Image:
-    on:
-      workflow_run:
-        workflows: ["CI"]
-        types: [completed]
-        branches: [main]
     runs-on: self-hosted          
     steps:
       - name: Build & Push Images
