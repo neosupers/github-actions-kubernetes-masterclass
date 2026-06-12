@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-push:
+  Build-Image:
     #runs-on: ubuntu-latest
     runs-on: self-hosted
     steps:
@@ -18,7 +18,10 @@ jobs:
       # Login + push only happen when DEPLOY_ENABLED=true.
       # Otherwise the job builds the images locally to validate the
       # Dockerfiles and exits green — a "dry run."
-      - name: Bhuild & Push Images
+  Push_Image:
+    runs-on: self-hosted          
+    steps:
+      - name: Build & Push Images
         uses: docker/login-action@v4
         if: ${{ vars.DEPLOY_ENABLED == 'true' }}
         with:
@@ -30,11 +33,11 @@ jobs:
         with:
           context: ./backend
           push: ${{ vars.DEPLOY_ENABLED == 'true' }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/skillpulse-backend:latest', secrets.DOCKERHUB_USERNAME) || 'skillpulse-backend:latest' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/rahul-backend:latest', secrets.DOCKERHUB_USERNAME) || 'rahul-backend:latest' }}
 
       - name: Build and push frontend
         uses: docker/build-push-action@v7
         with:
           context: ./frontend
           push: ${{ vars.DEPLOY_ENABLED == 'true' }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/skillpulse-frontend:latest', secrets.DOCKERHUB_USERNAME) || 'skillpulse-frontend:latest' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/rahul-frontend:latest', secrets.DOCKERHUB_USERNAME) || 'rahul-frontend:latest' }}
